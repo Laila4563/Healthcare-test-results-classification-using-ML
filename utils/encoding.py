@@ -1,5 +1,6 @@
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
+# pip install category_encoders
 from category_encoders import TargetEncoder
 
 
