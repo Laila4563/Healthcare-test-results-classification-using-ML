@@ -46,6 +46,11 @@ def encode_features(df, target_col=None, cardinality_threshold=10):
                 le = LabelEncoder()
                 df_encoded[col] = le.fit_transform(df_encoded[col])
 
+    # Ensure all boolean columns are 0/1
+    for col in df_encoded.columns:
+        if df_encoded[col].dtype == bool:
+            df_encoded[col] = df_encoded[col].astype(int)
+
     # Final return
     if target_col:
         return df_encoded, y
