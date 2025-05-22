@@ -13,7 +13,7 @@ def svm_classifier(X_train, X_test, y_train, y_test, kernel='linear'):
     Returns:
     - model: Trained SVM model
     """
-    
+
     # Initialize the SVM model
     model = SVC(kernel=kernel, decision_function_shape='ovr')  # Multiclass: One-vs-Rest strategy
     # used OvR rather than OvO due to simplicity and speed
