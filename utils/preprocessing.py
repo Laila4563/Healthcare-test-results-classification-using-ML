@@ -1,55 +1,63 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import pandas as pd
+
 
 
 def handle_categorical_missing_values(df):
-    df = df.copy()
-
-    # Replace "None" and "NA" with "Not Available"
-    for col in df.select_dtypes(include=["object"]).columns:
-        df.loc[:, col] = df[col].replace(["None", "NA"], "Not Available")
-
-        # Calculate the percentage of NaN values
-        missing_percentage = df[col].isna().mean() * 100
-
-        if missing_percentage > 50:
-            print(
-                f"Dropping column '{col}' due to {missing_percentage:.2f}% missing values."
-            )
-            df.drop(columns=[col], inplace=True)
-        elif missing_percentage > 0:
-            mode_value = df[col].mode()[0]  # Get the most frequent value
-            print(f"Filling missing values in '{col}' with mode: {mode_value}")
-            df.loc[:, col] = df[col].fillna(mode_value)
-
+    # Display missing data info before handling
+    print("Missing values before handling categorical columns:")
+    display_missing_info(df)
+    
+    # Categorical columns: use mode or "Unknown"
+    categorical_cols = ['Blood Type', 'Doctor', 'Hospital', 'Insurance Provider', 'Admission Type']
+    for col in categorical_cols:
+        if col in df.columns:  # Check if column exists in dataframe
+            if df[col].isnull().mean() > 0.05:
+                df[col].fillna("Unknown", inplace=True)  # For higher missing %
+            else:
+                df[col].fillna(df[col].mode()[0], inplace=True)
+    
+    # Display missing data info after handling
+    print("\nMissing values after handling categorical columns:")
+    display_missing_info(df)
+    
     return df
-
 
 def handle_numerical_missing_values(df):
-    df = df.copy()
-
-    # Handle missing values in numerical columns
-    for col in df.select_dtypes(include=["number"]).columns:
-        missing_percentage = df[col].isna().mean() * 100
-
-        if missing_percentage > 50:
-            print(
-                f"Dropping column '{col}' due to {missing_percentage:.2f}% missing values."
-            )
-            df.drop(columns=[col], inplace=True)
-        elif missing_percentage > 0:
-            median_value = df[col].median()
-            print(f"Filling missing values in '{col}' with median: {median_value}")
-            df.loc[:, col] = df[col].fillna(median_value)
-
+    # Display missing data info before handling
+    print("Missing values before handling numerical columns:")
+    display_missing_info(df)
+    
+    # Numerical columns: use median
+    if 'Billing Amount' in df.columns:  # Check if column exists in dataframe
+        df['Billing Amount'].fillna(df['Billing Amount'].median(), inplace=True)
+    
+    # Display missing data info after handling
+    print("\nMissing values after handling numerical columns:")
+    display_missing_info(df)
+    
     return df
 
-
-def clean_missing_values(df):
-    df = handle_categorical_missing_values(df)
-    df = handle_numerical_missing_values(df)
-    return df
+def display_missing_info(df):
+    missing_values = df.isnull().sum()
+    missing_percentage = (missing_values / len(df)) * 100
+    column_types = df.dtypes
+    
+    missing_data = pd.DataFrame({
+        'Column Type': column_types,
+        'Missing Values': missing_values,
+        'Percentage (%)': missing_percentage
+    })
+    
+    # Filter only columns with missing values
+    missing_data = missing_data[missing_data['Missing Values'] > 0]
+    
+    if missing_data.empty:
+        print("No missing values found!")
+    else:
+        print(missing_data)
 
 
 def look_for_outliers(df):
