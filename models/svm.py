@@ -38,6 +38,9 @@ def linear_svm_with_grid(X_train, y_train, X_val, y_val, X_test, y_test):
 
     print("\n[Classification Report - Test Set]")
     print(classification_report(y_test, tuned_test_pred))
+    
+    print("Confusion Matrix:")
+    print(confusion_matrix(y_test, tuned_test_pred))
 
     return best_model
 
@@ -93,6 +96,9 @@ def rbf_svm_with_pso(X_train, X_val, X_test, y_train, y_val, y_test):
 
     print("\n[Classification Report - Test Set]")
     print(classification_report(y_test, tuned_test_pred))
+    
+    print("Confusion Matrix:")
+    print(confusion_matrix(y_test, tuned_test_pred))
 
     return final_model
 

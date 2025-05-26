@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import classification_report, accuracy_score
+from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
 
 def random_forest_with_grid(X_train, y_train, X_val, y_val, X_test, y_test):
     # -------- Initial Model (Before Tuning) --------
@@ -52,5 +52,7 @@ def random_forest_with_grid(X_train, y_train, X_val, y_val, X_test, y_test):
 
     print("\nClassification Report (Test Set):")
     print(classification_report(y_test, tuned_test_pred))
-    
+
+    print("Confusion Matrix:")
+    print(confusion_matrix(y_test, tuned_test_pred))
     return best_model

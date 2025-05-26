@@ -8,6 +8,9 @@ from sklearn.utils.class_weight import compute_class_weight
 import numpy as np
 import tempfile
 import os
+from sklearn.model_selection import learning_curve
+import matplotlib.pyplot as plt
+import numpy as np
 
 # === Build MLP Model ===
 def build_model(hp, input_shape):
@@ -142,3 +145,22 @@ def evaluate_model(model, X_test, y_test):
     print(classification_report(y_test, y_pred_classes))
     print("Confusion Matrix:")
     print(confusion_matrix(y_test, y_pred_classes))
+
+
+
+
+def plot_mlp_model(history, model_name="MLP"):
+    acc = history.history['accuracy']
+    val_acc = history.history['val_accuracy']
+    epochs = range(1, len(acc) + 1)
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(epochs, acc, 'bo-', label='Training Accuracy')
+    plt.plot(epochs, val_acc, 'ro-', label='Validation Accuracy')
+    plt.title(f'{model_name} Learning Curve')
+    plt.xlabel('Epochs')
+    plt.ylabel('Accuracy')
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()

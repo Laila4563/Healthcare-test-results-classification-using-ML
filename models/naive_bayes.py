@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.model_selection import GridSearchCV
 from sklearn.naive_bayes import GaussianNB
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, confusion_matrix
 
 
 def naive_bayes_classifier(X_train, X_val, X_test, y_train, y_val, y_test, label=""):
@@ -18,6 +18,8 @@ def naive_bayes_classifier(X_train, X_val, X_test, y_train, y_val, y_test, label
     y_test_pred = model.predict(X_test)
     print(f"Naive Bayes {label} - Test Performance:")
     print(classification_report(y_test, y_test_pred))
+    print("Confusion Matrix:")
+    print(confusion_matrix(y_test, y_test_pred))
 
     return model
 
@@ -54,5 +56,7 @@ def naive_bayes_with_grid_search(
     y_test_pred = best_model.predict(X_test)
     print(f"Naive Bayes {label} (Tuned) - Test Performance:")
     print(classification_report(y_test, y_test_pred))
+    print("Confusion Matrix:")
+    print(confusion_matrix(y_test, y_test_pred))
 
     return best_model

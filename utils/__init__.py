@@ -9,3 +9,4 @@ from .encoding import encode_features
 from .skewness import treat_skewness
 from .scaling import scale_features
 from .PCA import apply_pca
+from .plotting import plot_sklearn_learning_curve

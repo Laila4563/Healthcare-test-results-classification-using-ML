@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from xgboost import XGBClassifier
 from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import classification_report, accuracy_score
+from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
 
 def xgboost_with_tuning(X_train, X_val, X_test, y_train, y_val, y_test):
     """
@@ -29,9 +29,9 @@ def xgboost_with_tuning(X_train, X_val, X_test, y_train, y_val, y_test):
 
     # Print pre-tuning evaluation metrics
     print("\n[INFO] Evaluation BEFORE Tuning")
-    print(f"Train Accuracy: {accuracy_score(y_train, y_train_pred_base):.2%}")
-    print(f"Validation Accuracy: {accuracy_score(y_val, y_val_pred_base):.2%}")
-    print(f"Test Accuracy: {accuracy_score(y_test, y_test_pred_base):.2%}")
+    print(f"Train Accuracy: {accuracy_score(y_train, y_train_pred_base):.4f}")
+    print(f"Validation Accuracy: {accuracy_score(y_val, y_val_pred_base):.4f}")
+    print(f"Test Accuracy: {accuracy_score(y_test, y_test_pred_base):.4f}")
     print("\nClassification Report (Test Set - Before Tuning):")
     print(classification_report(y_test, y_test_pred_base))
 
@@ -64,10 +64,14 @@ def xgboost_with_tuning(X_train, X_val, X_test, y_train, y_val, y_test):
     print(grid_search.best_params_)
 
     print("\n[INFO] Evaluation AFTER Tuning")
-    print(f"Train Accuracy: {accuracy_score(y_train, y_train_pred):.2%}")
-    print(f"Validation Accuracy: {accuracy_score(y_val, y_val_pred):.2%}")
-    print(f"Test Accuracy: {accuracy_score(y_test, y_test_pred):.2%}")
+    print(f"Train Accuracy: {accuracy_score(y_train, y_train_pred):.4f}")
+    print(f"Validation Accuracy: {accuracy_score(y_val, y_val_pred):.4f}")
+    print(f"Test Accuracy: {accuracy_score(y_test, y_test_pred):.4f}")
+    
     print("\nClassification Report (Test Set - After Tuning):")
     print(classification_report(y_test, y_test_pred))
+    
+    print("Confusion Matrix:")
+    print(confusion_matrix(y_test, y_test_pred))
 
     return best_model
