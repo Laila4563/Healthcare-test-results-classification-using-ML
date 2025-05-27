@@ -30,4 +30,4 @@ def scale_features(df, target_col=None, scaler_type="standard"):
     df_scaled[continuous_cols] = scaler.fit_transform(df_scaled[continuous_cols])
     print(f"[SUCCESS] Scaled features: {continuous_cols}")
 
-    return df_scaled, continuous_cols
+    return df_scaled, continuous_cols, scaler

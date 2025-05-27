@@ -11,6 +11,7 @@ import os
 from sklearn.model_selection import learning_curve
 import matplotlib.pyplot as plt
 import numpy as np
+import joblib
 
 # === Build MLP Model ===
 def build_model(hp, input_shape):
@@ -139,6 +140,8 @@ def evaluate_model(model, X_test, y_test):
     loss, accuracy = model.evaluate(X_test, y_test, verbose=0)
     y_pred = model.predict(X_test, verbose=0)
     y_pred_classes = np.argmax(y_pred, axis=1)
+    
+    joblib.dump(model, "saved_models/mlp_model.pkl")
 
     print(f"Test Accuracy: {accuracy:.4f}")
     print("Classification Report:")

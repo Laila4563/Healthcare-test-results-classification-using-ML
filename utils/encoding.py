@@ -1,9 +1,9 @@
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from category_encoders import TargetEncoder
+import joblib
 
-
-def encode_features(df, target_col=None, cardinality_threshold=10):
+def encode_features(df, target_col=None, cardinality_threshold=10, label_encoder_path="stubs/label_encoder.pkl"):
     df_encoded = df.copy()
 
     ordinal_map = {"Admission Type": {"Elective": 0, "Urgent": 1, "Emergency": 2}}
@@ -19,11 +19,16 @@ def encode_features(df, target_col=None, cardinality_threshold=10):
 
     # Separate target
     y = None
+    le = None
     if target_col:
         if df_encoded[target_col].dtype == object:
             le = LabelEncoder()
             df_encoded[target_col] = le.fit_transform(df_encoded[target_col])
             print(f"Target column '{target_col}' label encoded.")
+            # Save the fitted label encoder if a path is provided
+            if label_encoder_path is not None:
+                joblib.dump(le, label_encoder_path)
+                print(f"LabelEncoder saved to {label_encoder_path}")
         y = df_encoded[target_col]
         df_encoded = df_encoded.drop(columns=[target_col])
         print(f"Target column '{target_col}' separated from features.")
@@ -46,8 +51,8 @@ def encode_features(df, target_col=None, cardinality_threshold=10):
                     f"Target encoding applied to '{col}' (> {cardinality_threshold} unique values)"
                 )
             else:
-                le = LabelEncoder()
-                df_encoded[col] = le.fit_transform(df_encoded[col])
+                le_cat = LabelEncoder()
+                df_encoded[col] = le_cat.fit_transform(df_encoded[col])
                 print(
                     f"Label encoding applied to '{col}' (> {cardinality_threshold} unique values, no target provided)"
                 )
@@ -62,3 +67,6 @@ def encode_features(df, target_col=None, cardinality_threshold=10):
         return df_encoded, y
     else:
         return df_encoded
+
+# Usage example in your training script:
+# df_encoded, y = encode_features(df, target_col="Test Results", label_encoder_path="label_encoder.pkl")

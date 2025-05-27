@@ -2,6 +2,7 @@ import numpy as np
 from sklearn.model_selection import GridSearchCV
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import classification_report, confusion_matrix
+import joblib
 
 
 def naive_bayes_classifier(X_train, X_val, X_test, y_train, y_val, y_test, label=""):
@@ -58,5 +59,8 @@ def naive_bayes_with_grid_search(
     print(classification_report(y_test, y_test_pred))
     print("Confusion Matrix:")
     print(confusion_matrix(y_test, y_test_pred))
+    
+    # Save the best model
+    joblib.dump(best_model, f"saved_models/nb_best_model.pkl")
 
     return best_model

@@ -2,6 +2,7 @@ import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
+import joblib  # For saving the model
 
 def random_forest_with_grid(X_train, y_train, X_val, y_val, X_test, y_test):
     # -------- Initial Model (Before Tuning) --------
@@ -37,6 +38,9 @@ def random_forest_with_grid(X_train, y_train, X_val, y_val, X_test, y_test):
     # Combine training and validation for more robust training during tuning
     grid_search.fit(np.vstack((X_train, X_val)), np.hstack((y_train, y_val)))
     best_model = grid_search.best_estimator_
+    
+    joblib.dump(best_model, "saved_models/random_forest_best_model.pkl")
+    print(f"\n[INFO] Best model saved to: random_forest_best_model.pkl")
 
     tuned_train_pred = best_model.predict(X_train)
     tuned_val_pred = best_model.predict(X_val)

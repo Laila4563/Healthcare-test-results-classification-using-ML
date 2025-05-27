@@ -1,2 +1,4 @@
 **/__pycache__
 .gitattributes
+stubs/
+saved_models/
